@@ -1,1 +1,1 @@
-# vladimir-ryzhkov-org.github.io
+https://vladimir.ryzhkov.org/
