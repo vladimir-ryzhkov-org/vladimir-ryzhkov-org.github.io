@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
-import os
-
 from bs4 import BeautifulSoup
 
-log_file = open(os.path.join("src", "chars.txt"), "w")
+log_file = open("src/chars.txt", "w")
 
 
 def log(*values):
@@ -13,12 +11,18 @@ def log(*values):
 
 
 total = 0
-path = os.path.join("docs", "files")
-for file_name in os.listdir(path):
-    if not file_name.endswith(".html"):
+
+with open("docs/index.html", "r") as file:
+    html = file.read()
+
+soup = BeautifulSoup(html, "html.parser")
+for li in soup.find_all("li"):
+    a = li.a
+    href = a["href"]
+    if not href.startswith("files/") or not href.endswith(".html"):
         continue
 
-    with open(os.path.join(path, file_name), "r") as file:
+    with open(f"docs/{href}", "r") as file:
         html = file.read()
 
     soup = BeautifulSoup(html, "html.parser")
@@ -26,5 +30,5 @@ for file_name in os.listdir(path):
     chars = len(text)
     total += chars
 
-    log(f"{chars}\t{file_name}")
+    log(f"{chars}\t{soup.title.string}")
 log(f"{total}\tTOTAL")
